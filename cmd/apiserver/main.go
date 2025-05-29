@@ -5,7 +5,6 @@ import (
 	"flag"
 	"github.com/BurntSushi/toml"
 	"log"
-	"time"
 )
 
 var (
@@ -25,11 +24,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	s, err := apiserver.Start(config)
-	if err != nil {
+	if err := apiserver.Start(config); err != nil {
 		log.Fatal(err)
 	}
-
-	stopChan := make(chan struct{})
-	go s.StartRefreshTokenCleanup(24*time.Hour, stopChan)
 }

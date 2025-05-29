@@ -8,10 +8,10 @@ import (
 )
 
 // Start ...
-func Start(config *Config) (s *Server, err error) {
+func Start(config *Config) error {
 	db, err := newDB(config.DatabaseURL)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	defer db.Close()
@@ -20,7 +20,7 @@ func Start(config *Config) (s *Server, err error) {
 	sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
 	srv := newServer(store, sessionStore)
 
-	return srv, http.ListenAndServe(config.BindAddr, srv)
+	return http.ListenAndServe(config.BindAddr, srv)
 }
 
 func newDB(databaseURL string) (*sql.DB, error) {
